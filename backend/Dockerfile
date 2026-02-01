@@ -1,3 +1,4 @@
+
 FROM php:8.4-fpm
 
 WORKDIR /var/www
@@ -19,15 +20,13 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath zip
 
+
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 
 COPY --chown=www-data:www-data . /var/www
 
-
-RUN composer install --no-dev --optimize-autoloader
-
-
-RUN php artisan key:generate
+RUN chown -R www-data:www-data /var/www
 
 EXPOSE 9000
 
